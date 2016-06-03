@@ -29,7 +29,7 @@ function LineChart() {
             //line 
             var line = d3.svg.line()
                         .interpolate('basis')
-                        .x(function(d) {console.log(d); return xScale(+d.xval)})
+                        .x(function(d) {return xScale(+d.xval)})
                         .y(function(d) {return yScale(+d.yval)});
             
             color.domain(d3.keys(data[0]).filter(function(key) {return key !== x;}));
@@ -125,12 +125,19 @@ function LineChart() {
                     
             paths.enter().append('path')
                     .attr('class', 'a-path')
-                    .attr('d', function(d) {console.log(d.values); return line(d.values)})
+                    .attr('d', function(d) {
+                        var arr = [];
+                        for (var i = 0; i < d.values.length; i++) {
+                            var obj = {xval: d.values[i].xval, yval: yMin};
+                            arr.push(obj);
+                        }
+                        return line(arr);
+                    })
                     .style('stroke', function(d) {return color(d.name)});
                     
             paths.exit().transition().duration(500).remove();
             
-            paths.transition().duration(500)
+            paths.transition().duration(1500)
                     .attr('d', function(d) {console.log(d.values); return line(d.values)});
         });
     }
