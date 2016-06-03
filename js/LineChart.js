@@ -10,6 +10,7 @@ function LineChart() {
     var xText = 'X Axis';
     var yText = 'Y Axis';
     var color = d3.scale.category10();
+    var filter = [];
     var margin = {
         top: 0,
         left: 75,
@@ -32,7 +33,7 @@ function LineChart() {
                         .x(function(d) {return xScale(+d.xval)})
                         .y(function(d) {return yScale(+d.yval)});
             
-            color.domain(d3.keys(data[0]).filter(function(key) {return key !== x;}));
+            color.domain(d3.keys(data[0]).filter(function(key) {console.log(key); return key !== x;}));
             var deps = color.domain().map(function(name) {
                 return {
                     name: name,
@@ -178,6 +179,14 @@ function LineChart() {
         }
         height = val;
         return chart;
+    };
+    
+    chart.filter = function(arr) {
+      if (!arguments.length) {
+          return filter;
+      }
+      filter = arr;
+      return chart;  
     };
     
     return chart;
