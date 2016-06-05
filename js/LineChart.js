@@ -15,7 +15,7 @@ function LineChart() {
         top: 0,
         left: 75,
         bottom: 50,
-        right: 0
+        right: 110
     };
     
     function chart(selection) {
@@ -79,6 +79,10 @@ function LineChart() {
             gEnter.append('text')
                     .attr('class', 'ytitle title');
                     
+            //legend
+            gEnter.append('g')
+                    .attr('class', 'legend');
+                    
             //set scales
             xScale.domain(d3.extent(data, function(d) {return d[x]})).range([0, innerWidth]);
             console.log(xScale.domain());
@@ -121,6 +125,25 @@ function LineChart() {
                   
             //re select gEnter to append shapes
             var g = div.select('.gEnter');
+            
+            var legend = g.selectAll('.legend').data(deps);
+            
+            legend.enter().append('g')
+                        .attr('transform', function(d, i) {return 'translate(0, ' + (i * 25) + ')'});
+                        
+            legend.append('rect')
+                    .attr('x', innerWidth + 30)
+                    .attr('width', 18)
+                    .attr('height', 18)
+                    .attr('fill', function(d) {return color(d.name)});
+                    
+            legend.append('text')
+                    .attr('x', innerWidth + 50)
+                    .attr('y', 9)
+                    .attr('dy', '.35em')
+                    .attr('class', 'legend-text')
+                    .style('text-anchor', 'start')
+                    .text(function(d) {return d.name});
             
             var paths = g.selectAll('.a-path').data(deps);
                     
